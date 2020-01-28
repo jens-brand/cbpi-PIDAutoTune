@@ -32,7 +32,8 @@ class PIDAutoTune(KettleController):
 	def run(self):
 		self.notify("AutoTune In Progress", "Do not turn off Auto mode until AutoTuning is complete", type="success", timeout=None)
 	
-		wait_time = sampleTime
+		sampleTime = self.sampleTime
+		wait_time = self.sampleTime
 		outstep = float(self.a_outstep)
 		outmax = float(self.b_maxout)
 		lookbackSec = float(self.c_lookback)
