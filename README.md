@@ -1,5 +1,7 @@
 # PID AutoTune Plugin for CraftBeerPi 3.0
 
+Additionally to the original plugin in this version the sampletime can be set as property.
+
 This plugin is a port of the PIDAutoTune logic from CraftBeerPi 2.2, with some added features to aid in usability. The purpose of autotuning is achieve a better set of variables to use for configuring your other PID-controlled devices, such as a heating element in your mash tun. Once you have used PIDAutoTune to calibrate your system, you will be given three numbers which you must enter into the settings page for the appropriate device. 
 
 For more info on PID and autotuning, you can check out the following articles:
