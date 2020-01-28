@@ -16,7 +16,8 @@ class PIDAutoTune(KettleController):
 	a_outstep = Property.Number("output step %", True, 100, description="Default: 100. Sets the output when stepping up/down.")
 	b_maxout = Property.Number("max. output %", True, 100, description="Default: 100. Sets the max power output.")
 	c_lookback = Property.Number("lookback seconds", True, 30, description="Default: 30. How far back to look for min/max temps.")
-
+	sampleTime = Property.Number("sampletime seconds", True, 10, description="Default: 10. Time for one control loop.")
+	
 	def autoOff(self):
 		cbpi.cache.get("kettle")[self.kettle_id].state = False
 		super(KettleController, self).stop()
@@ -31,8 +32,7 @@ class PIDAutoTune(KettleController):
 	def run(self):
 		self.notify("AutoTune In Progress", "Do not turn off Auto mode until AutoTuning is complete", type="success", timeout=None)
 	
-		sampleTime = 5
-		wait_time = 5
+		wait_time = sampleTime
 		outstep = float(self.a_outstep)
 		outmax = float(self.b_maxout)
 		lookbackSec = float(self.c_lookback)
@@ -49,12 +49,12 @@ class PIDAutoTune(KettleController):
 			heat_percent = atune.output
 			heating_time = sampleTime * heat_percent / 100
 			wait_time = sampleTime - heating_time
-			if heating_time == sampleTime:
+			if heating_time >= (sampleTime - 0.5):
 				self.heater_on()
-				self.sleep(heating_time)
-			elif wait_time == sampleTime:
+				self.sleep(sampleTime)
+			elif wait_time >= (sampleTime - 0.5):
 				self.heater_off()
-				self.sleep(wait_time)
+				self.sleep(sampleTime)
 			else:
 				self.heater_on()
 				self.sleep(heating_time)
